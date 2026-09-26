@@ -1,0 +1,148 @@
+@import "tailwindcss";
+
+/*
+  4STAR design system.
+
+  Taken from the website design document: an off-white print-like ground,
+  hairline rules, a serif display face, and small-caps letterspaced eyebrow
+  labels in tan. Brand navy and red come from the 4STAR logo.
+
+  This design commits to a single light appearance on purpose — it mirrors a
+  printed brochure, so there is no dark variant.
+*/
+
+@theme {
+  /* Ground */
+  --color-ground: #faf9f7;
+  --color-panel: #f5f2ed;
+  --color-surface: #ffffff;
+  --color-rule: #e2ded7;
+  --color-rule-strong: #cfc9c0;
+
+  /* Ink */
+  --color-ink: #1a1a1a;
+  --color-ink-soft: #4a4540;
+  --color-ink-muted: #6b6560;
+  --color-ink-faint: #948d85;
+
+  /* Brand */
+  --color-navy: #1b2a6b;
+  --color-navy-dark: #131e4c;
+  --color-brand-red: #d42027;
+  --color-accent: #a08b5f;
+  --color-accent-soft: #c4b389;
+
+  /* The dark manufacturing band */
+  --color-band: #14161c;
+  --color-band-soft: #23262f;
+
+  /* Type */
+  --font-display: var(--font-display), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* The document's page rhythm */
+  --spacing-section: 6rem;
+  --spacing-section-sm: 3.5rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-ground);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  /* The small-caps tan label above every section heading — "STRUCTURE",
+     "HOME PAGE", "CATALOGUE" in the design document. */
+  .eyebrow {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  /* Large serif section headings. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
+
+  /* Scroll reveal. Small and slow rather than quick and springy: this is a
+     printed brochure, and the movement should read as a page settling, not as
+     an interface animating. Paired with components/Reveal.jsx. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+    /* Hints the compositor without leaving layers around afterwards. */
+    will-change: opacity, transform;
+  }
+
+  .reveal[data-shown="true"] {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+
+  /* Column-header row used by every table in the design. */
+  .table-head {
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+
+  /* Page-width container matching the document's generous margins. */
+  .shell {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+}
+
+/* Keyboard focus stays visible everywhere, in brand navy. */
+:focus-visible {
+  outline: 2px solid var(--color-navy);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Never animated in, and never hidden waiting to be. */
+  .reveal,
+  .reveal[data-shown="false"] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

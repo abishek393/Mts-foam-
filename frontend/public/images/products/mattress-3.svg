@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Placeholder mattress image">
+  <rect width="800" height="600" fill="#F5F2ED"/>
+  <rect x="150" y="284" width="500" height="54" rx="10" fill="#FFFFFF" stroke="#D8D2C8" stroke-width="1.5" />
+  <rect x="150" y="338" width="500" height="26" rx="10" fill="#EDE8E0" stroke="#D8D2C8" stroke-width="1.5" />
+  <rect x="150" y="364" width="500" height="70" rx="10" fill="#1B2A6B" stroke="#16225A" stroke-width="1.5" opacity="0.9"/>
+  <line x1="178" y1="296" x2="178" y2="326" stroke="#D8D2C8" stroke-width="1.2" stroke-dasharray="4 5"/>
+  <line x1="233" y1="296" x2="233" y2="326" stroke="#D8D2C8" stroke-width="1.2" stroke-dasharray="4 5"/>
+  <line x1="288" y1="296" x2="288" y2="326" stroke="#D8D2C8" stroke-width="1.2" stroke-dasharray="4 5"/>
+  <line x1="343" y1="296" x2="343" y2="326" stroke="#D8D2C8" stroke-width="1.2" stroke-dasharray="4 5"/>
+  <line x1="398" y1="296" x2="398" y2="326" stroke="#D8D2C8" stroke-width="1.2" stroke-dasharray="4 5"/>
+  <line x1="453" y1="296" x2="453" y2="326" stroke="#D8D2C8" stroke-width="1.2" stroke-dasharray="4 5"/>
+  <line x1="508" y1="296" x2="508" y2="326" stroke="#D8D2C8" stroke-width="1.2" stroke-dasharray="4 5"/>
+  <line x1="563" y1="296" x2="563" y2="326" stroke="#D8D2C8" stroke-width="1.2" stroke-dasharray="4 5"/>
+  <line x1="618" y1="296" x2="618" y2="326" stroke="#D8D2C8" stroke-width="1.2" stroke-dasharray="4 5"/>
+  <line x1="150" y1="454" x2="650" y2="454" stroke="#D8D2C8" stroke-width="1"/>
+  <text x="400" y="556" text-anchor="middle" font-family="Georgia, serif" font-size="15" letter-spacing="3.2" fill="#B4ADA3">PLACEHOLDER IMAGE</text>
+</svg>
