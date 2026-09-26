@@ -1,0 +1,3 @@
+# Uploaded files stay on the machine that received them — never committed.
+*
+!.gitignore

@@ -1,0 +1,102 @@
+# ---------------------------------------------------------------------------
+# 4STAR / MTS — repository ignore rules
+#
+# frontend/ carries its own .gitignore (the Next.js default) and
+# backend/uploads/ carries one that excludes its whole contents. This file
+# covers the repository as a whole, and deliberately repeats a few of those
+# rules so that moving or deleting a nested file cannot quietly start
+# committing build output or secrets.
+# ---------------------------------------------------------------------------
+
+# --- Secrets -----------------------------------------------------------
+# backend/.env holds the JWT signing secret, the Gmail App Password and the
+# Google OAuth client secret; frontend/.env.local holds the public client id
+# and the API URL. None of them ever belong in the repository.
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# --- Dependencies ------------------------------------------------------
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Lockfiles are NOT ignored on purpose — package-lock.json is what makes an
+# install reproducible, so it must be committed.
+
+# --- Build output ------------------------------------------------------
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+.turbo/
+
+# --- Uploaded files ----------------------------------------------------
+# Storage is local disk for now (backend/config/storage.js). Everything in
+# here was uploaded by a user at runtime and belongs to the machine that
+# received it, not to the source tree. The folder itself is kept so a fresh
+# clone still has somewhere to write.
+backend/uploads/*
+!backend/uploads/.gitignore
+
+# --- Logs and runtime scratch -------------------------------------------
+# backend-dev.log / frontend-dev.log are the redirected dev-server output.
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+pids/
+*.pid
+*.seed
+
+# --- Local database dumps ------------------------------------------------
+# MySQL is the real store; anything like this in the tree is a local scratch
+# copy or an export someone took by hand.
+*.sqlite
+*.sqlite3
+*.db
+*.sql.gz
+*.dump
+
+# --- Tests and coverage ---------------------------------------------------
+coverage/
+.nyc_output/
+
+# --- Certificates and keys ------------------------------------------------
+*.pem
+*.key
+*.p12
+*.pfx
+
+# --- Editors and OS ------------------------------------------------------
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# --- Caches ---------------------------------------------------------------
+.cache/
+.eslintcache
+.parcel-cache/
+tmp/
+temp/
