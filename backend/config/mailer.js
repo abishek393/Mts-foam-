@@ -31,9 +31,61 @@ export const mailFrom = () =>
         ? `4STAR Mattress <${process.env.SMTP_USER}>`
         : "4STAR Mattress <no-reply@4starmattress.com>");
 
+// Brevo sends over HTTPS rather than SMTP. That matters in production: Render's
+// free tier blocks outbound SMTP ports (25, 465, 587), so Gmail SMTP times out
+// there however correct the credentials are. With BREVO_API_KEY set, Brevo is
+// used and SMTP is ignored. The sender (MAIL_FROM) must be verified in Brevo.
+const brevoKey = () => process.env.BREVO_API_KEY;
+
 export const isMailConfigured = () => {
+    if (brevoKey()) return true;
     const { host, user, pass } = settings();
     return Boolean(host && user && pass);
+};
+
+// "4STAR Mattress <x@y.com>" → { name, email }, the shape Brevo wants.
+const parseAddress = (address) => {
+    const match = /^\s*(.*?)\s*<([^>]+)>\s*$/.exec(address);
+    return match ? { name: match[1] || undefined, email: match[2] } : { email: address.trim() };
+};
+
+const brevoTransport = {
+    sendMail: async ({ from, to, subject, text, html }) => {
+        let response;
+
+        try {
+            response = await fetch("https://api.brevo.com/v3/smtp/email", {
+                method: "POST",
+                headers: {
+                    "api-key": brevoKey(),
+                    "content-type": "application/json",
+                    accept: "application/json",
+                },
+                body: JSON.stringify({
+                    sender: parseAddress(from),
+                    to: [{ email: to }],
+                    subject,
+                    textContent: text,
+                    htmlContent: html,
+                }),
+                // Bounded, because a signup form is waiting on this.
+                signal: AbortSignal.timeout(20000),
+            });
+        } catch (error) {
+            // fetch hides the socket error code in `cause`; surface it so the
+            // retry loop below recognises a dropped connection.
+            error.code = error.cause?.code ?? error.code ?? "ECONNECTION";
+            throw error;
+        }
+
+        if (!response.ok) {
+            const body = await response.json().catch(() => ({}));
+            const error = new Error(`Brevo ${response.status}: ${body.message ?? response.statusText}`);
+            // Their outage is worth a retry; a rejected key or sender is not.
+            if (response.status >= 500) error.code = "ECONNECTION";
+            throw error;
+        }
+    },
 };
 
 let transport = null;
@@ -41,6 +93,7 @@ let transportKey = null;
 
 const getTransport = () => {
     if (!isMailConfigured()) return null;
+    if (brevoKey()) return brevoTransport;
 
     const { host, port, user, pass } = settings();
 
